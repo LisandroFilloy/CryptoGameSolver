@@ -96,9 +96,23 @@ class Crypto():
 
 		return outcomes
 
+	def __call__(self):
+		print('card1:')
+		card1 = int(input())
+		print('card2:')
+		card2 = int(input())
+		print('card3:')
+		card3 = int(input())
+		print('card4:')
+		card4 = int(input())
+		print('target:')
+		target = int(input())
+
+		print(self.solveGame(card1, card2, card3, card4, target))
+
+
 if __name__ == '__main__':
 	
-	cryptogame = Crypto()
-	print(cryptogame.possibleNaturalOutcomes(1,2,3,4))
+	Crypto()()	
 
 
