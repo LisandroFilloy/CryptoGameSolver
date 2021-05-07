@@ -1,118 +1,110 @@
-class Crypto():
-
-	def __init__(self):
-		self.umbral = 10e-6
-
-	def _possible_results_two(self,a,b):
-		res = dict()
-		res[a+b] =  f'({a}+{b})'
-		res[a-b] = f'({a}-{b})'
-		res[a*b] = f'({a}*{b})'
-		if b != 0:
-			res[a / b] = f'({a}/{b})'
-
-		#dicc result: [used numbers] , [used operations]
-		#If a key was already in the dicc, it overwrites it.
-		return res
-
-	def _possible_results_three(self,a,b,c):
-		res = dict()
-		numbers = [a,b,c]
-		for x in numbers:
-			numbers_temp = numbers.copy()
-			numbers_temp.remove(x)
-			for y in self._possible_results_two(numbers_temp[0],numbers_temp[1]).keys():
-				y_ops = self._possible_results_two(numbers_temp[0],numbers_temp[1])[y]
-				for z in self._possible_results_two(y,x).keys():
-					z_ops_1 = self._possible_results_two(y,x)[z]
-
-					z_ops_final = z_ops_1.replace(f'{y}',y_ops,1)
-					
-					res[z] = z_ops_final
-
-			for y in self._possible_results_two(numbers_temp[1],numbers_temp[0]).keys():
-				y_ops = self._possible_results_two(numbers_temp[1],numbers_temp[0])[y]
-				for z in self._possible_results_two(y,x).keys():
-					z_ops_1 = self._possible_results_two(y,x)[z]
-
-					z_ops_final = z_ops_1.replace(f'{y}',y_ops,1)
-					
-					res[z] = z_ops_final
-
-		return res
-
-	def _possible_results_four(self,a,b,c,d):
-		res = dict()
-		numbers = [a,b,c,d]
-		for x in numbers:
-			numbers_temp = numbers.copy()
-			numbers_temp.remove(x)
-			for y in self._possible_results_three(numbers_temp[0],numbers_temp[1], numbers_temp[2]).keys():
-				y_ops = self._possible_results_three(numbers_temp[0],numbers_temp[1], numbers_temp[2])[y]
-				for z in self._possible_results_two(y,x).keys():
-					z_ops_1 = self._possible_results_two(y,x)[z]
-
-					z_ops_final = z_ops_1.replace(f'{y}',y_ops,1)
-					
-					res[z] = z_ops_final
-
-		return res
+import random
 
 
-	def _same_number(self,a,b):
-		if abs(a-b) < self.umbral:
-			return True
-		else:
-			return False
+def same_number(a, b, thresh=10e-6):
+	if abs(a - b) < thresh:
+		return True
+	else:
+		return False
 
 
-	def solveGame(self, card1, card2, card3, card4, target=24):
-		
-		for result in self._possible_results_four(card1, card2, card3, card4).keys():
-			if self._same_number(result, target):
-				return(self._possible_results_four(card1, card2, card3, card4)[result])
+def possible_results_two(a, b):
+	res = dict()
+	res[a + b] = f'({a}+{b})'
+	res[a - b] = f'({a}-{b})'
+	res[a * b] = f'({a}*{b})'
+	if b != 0:
+		res[a / b] = f'({a}/{b})'
 
-		return None
+	# dicc result: [used numbers] , [used operations]
+	# If a key was already in the dicc, it overwrites it.
+	return res
 
-	def possibleNaturalOutcomes(self, card1, card2, card3, card4):
-		dic = self._possible_results_four(card1, card2, card3, card4)
-		outcomes_temp = list(dic.keys())
-		outcomes = []
-		for outcome in outcomes_temp:
-			if isinstance(outcome, int) and outcome >= 0:
-				outcomes.append(outcome)
-		outcomes.sort()
 
-		return outcomes
+def possible_results_three(a, b, c):
+	res = dict()
+	numbers = [a, b, c]
+	for x in numbers:
+		numbers_temp = numbers.copy()
+		numbers_temp.remove(x)
+		for y in possible_results_two(numbers_temp[0], numbers_temp[1]).keys():
+			y_ops = possible_results_two(numbers_temp[0], numbers_temp[1])[y]
+			for z in possible_results_two(y, x).keys():
+				z_ops_1 = possible_results_two(y, x)[z]
 
-	def possibleIntegerOutcomes(self, card1, card2, card3, card4):
-		dic = self._possible_results_four(card1, card2, card3, card4)
-		outcomes_temp = list(dic.keys())
-		outcomes = []
-		for outcome in outcomes_temp:
-			if isinstance(outcome, int):
-				outcomes.append(outcome)
-		outcomes.sort()
+				z_ops_final = z_ops_1.replace(f'{y}', y_ops, 1)
 
-		return outcomes
+				res[z] = z_ops_final
 
-	def __call__(self):
-		print('card1:')
-		card1 = int(input())
-		print('card2:')
-		card2 = int(input())
-		print('card3:')
-		card3 = int(input())
-		print('card4:')
-		card4 = int(input())
-		print('target:')
-		target = int(input())
+		for y in possible_results_two(numbers_temp[1], numbers_temp[0]).keys():
+			y_ops = possible_results_two(numbers_temp[1], numbers_temp[0])[y]
+			for z in possible_results_two(y, x).keys():
+				z_ops_1 = possible_results_two(y, x)[z]
 
-		print(self.solveGame(card1, card2, card3, card4, target))
+				z_ops_final = z_ops_1.replace(f'{y}', y_ops, 1)
+
+				res[z] = z_ops_final
+
+	return res
+
+
+def possible_results_four(a, b, c, d):
+	res = dict()
+	numbers = [a, b, c, d]
+	for x in numbers:
+		numbers_temp = numbers.copy()
+		numbers_temp.remove(x)
+		for y in possible_results_three(numbers_temp[0], numbers_temp[1], numbers_temp[2]).keys():
+			y_ops = possible_results_three(numbers_temp[0], numbers_temp[1], numbers_temp[2])[y]
+			for z in possible_results_two(y, x).keys():
+				z_ops_1 = possible_results_two(y, x)[z]
+
+				z_ops_final = z_ops_1.replace(f'{y}', y_ops, 1)
+
+				res[z] = z_ops_final
+
+	return res
+
+
+def solve_game(a, b, c, d, target=24):
+
+	for result in possible_results_four(a, b, c, d).keys():
+		if same_number(result, target):
+			return possible_results_four(a, b, c, d)[result]
+
+	return None
+
+
+def possible_natural_outcomes(a, b, c, d):
+	dic = possible_results_four(a, b, c, d)
+	outcomes_temp = list(dic.keys())
+	outcomes = []
+	for outcome in outcomes_temp:
+		if isinstance(outcome, int) and outcome >= 0:
+			outcomes.append(outcome)
+	outcomes.sort()
+
+	return outcomes
+
+
+def possible_integer_outcomes(a, b, c, d):
+	dic = possible_results_four(a, b, c, d)
+	outcomes_temp = list(dic.keys())
+	outcomes = []
+	for outcome in outcomes_temp:
+		if isinstance(outcome, int):
+			outcomes.append(outcome)
+	outcomes.sort()
+
+	return outcomes
+
+
+def shuffle(upper_bound=12):
+	a, b, c, d = (random.randint(1, upper_bound) for _ in range(4))
+	return a, b, c, d
 
 
 if __name__ == '__main__':
-	
-	Crypto()()	
-
-
+	card1, card2, card3, card4 = shuffle()
+	print(card1, card2, card3, card4)
+	print(solve_game(card1, card2, card3, card4))
