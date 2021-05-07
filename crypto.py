@@ -104,7 +104,4 @@ def shuffle(upper_bound=12):
 	return a, b, c, d
 
 
-if __name__ == '__main__':
-	card1, card2, card3, card4 = shuffle()
-	print(card1, card2, card3, card4)
-	print(solve_game(card1, card2, card3, card4))
+

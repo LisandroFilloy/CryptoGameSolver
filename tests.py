@@ -1,4 +1,8 @@
-from crypto import Crypto
+from crypto import solve_game, shuffle
 
-crypto_game1 = Crypto()
-print(crypto_game1.solveGame(1, 2, 3, 4, 17))
+if __name__ == '__main__':
+
+    for _ in range(10):
+        card1, card2, card3, card4 = shuffle()
+        print(card1, card2, card3, card4)
+        print(solve_game(card1, card2, card3, card4), '\n')
