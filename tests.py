@@ -1,4 +1,4 @@
-from crypto import solve_game, shuffle
+from crypto_solver import solve_game, shuffle
 
 if __name__ == '__main__':
 

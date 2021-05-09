@@ -100,8 +100,8 @@ def possible_integer_outcomes(a, b, c, d):
 
 
 def shuffle(upper_bound=12):
-	a, b, c, d = (random.randint(1, upper_bound) for _ in range(4))
-	return a, b, c, d
+	a, b, c, d, e = (random.randint(1, upper_bound) for _ in range(5))
+	return a, b, c, d, e
 
 
 
