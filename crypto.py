@@ -19,6 +19,11 @@ screen = pygame.display.set_mode(screen_size)
 LARGE_FONT = pygame.font.Font(pygame.font.get_default_font(), 70)
 SMALL_FONT = pygame.font.Font(pygame.font.get_default_font(), 20)
 
+# Generate 5 values that have
+a, b, c, d, e = shuffle(12)
+while not (solve_game(a, b, c, d, target=e) and solve_game(a, b, c, d, target=24)):
+    a, b, c, d, e = shuffle(12)
+
 # Cards and numbers positions
 card_target_text = LARGE_FONT.render(f'{e}', True, BLACK)
 card_target_text_pos = card_target_text.get_rect()
@@ -53,11 +58,6 @@ card_4_pos.center = card_4_text_pos.center
 cards_pos_list = [card_1_pos, card_2_pos, card_3_pos, card_4_pos]
 
 ops_pos_list = []
-
-# Generate 5 values that have
-a, b, c, d, e = shuffle(12)
-while not (solve_game(a, b, c, d, target=e) and solve_game(a, b, c, d, target=24)):
-    a, b, c, d, e = shuffle(12)
 
 main_menu = True
 crypto_game = False
